@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
-import Discord from "discord.js"; //import discord.js
+import Discord from "discord.js";
 import { OpenAIApi, Configuration } from "openai";
-import { MOTIVATE_ME_TO_TRIGGER, motivateMeTo } from "./motivator.mjs";
 import { getCommand } from "./commands.mjs";
 
 dotenv.config();

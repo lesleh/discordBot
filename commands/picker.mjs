@@ -1,7 +1,7 @@
-export const PICK_TRIGGER = "!pick";
+export const TRIGGER = "!pick";
 
-export async function pick(openai, message) {
-  const content = message.substring(PICK_TRIGGER.length).trim();
+export async function handler(openai, message) {
+  const content = message.substring(TRIGGER.length).trim();
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     frequency_penalty: 0.5,

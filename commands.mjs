@@ -1,10 +1,6 @@
-import { MOTIVATE_ME_TO_TRIGGER, motivateMeTo } from "./motivator.mjs";
-import { PICK_TRIGGER, pick } from "./picker.mjs";
+import { readdir } from "fs/promises";
 
-export const commands = {
-  [MOTIVATE_ME_TO_TRIGGER]: motivateMeTo,
-  [PICK_TRIGGER]: pick,
-};
+export const commands = {};
 
 /**
  *
@@ -15,3 +11,26 @@ export function getCommand(content) {
   const command = content.split(" ")[0];
   return commands[command] ?? null;
 }
+
+/**
+ * Registers a new command
+ * @param {(openai: OpenAIApi, content: string) => Promise<string> | null} command the command function
+ * @param {string} trigger the command trigger
+ */
+export function registerCommand(command, trigger) {
+  commands[trigger] = command;
+}
+
+export function unregisterCommand(trigger) {
+  delete commands[trigger];
+}
+
+export async function registerAllCommands() {
+  const files = await readdir("./commands");
+  for (const file of files) {
+    const { handler, TRIGGER } = await import(`./commands/${file}`);
+    if (handler && TRIGGER) registerCommand(handler, TRIGGER);
+  }
+}
+
+await registerAllCommands();
